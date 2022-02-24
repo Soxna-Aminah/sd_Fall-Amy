@@ -1,5 +1,6 @@
 
 from csv import*
+import csv
 from json import*
 import json
 import re
@@ -8,15 +9,16 @@ from xml import*
 import xml.etree.ElementTree as et
 import xmltodict
 from pprint import pprint
+from tkinter.filedialog import askopenfilename
 
 #Fonction pour déterminer l'extension du fichier
 def determineExtension():
-    fic=input("Veuillez saisir le chemine du fichier: ")
-    nfic=fic
+    filename = askopenfilename(title="Ouvrir votre document",filetypes=[('csv files','.csv'),('xml files','.xml'),('json files','.json'),('yaml files','.yaml','.yml'),('yaml files','.yml')])
+    fic=filename
     fic=fic.split(".")
     if len(fic)==2:
         extens=fic[1]
-        li=[nfic,extens]
+        li=[filename,extens]
         return li
     else: return False
 #Fonction pour importer et lire le fichier
@@ -52,8 +54,8 @@ def verifValidite(extens):
 #Transformer un dic en csv
 def dictocsv(myfile):
     with open("mynewfile.csv","w") as csv_out:
-        csv_writer=writer(csv_out)
-        csv_writer.writerows(myfile)
+        writer=writer(csv_out)
+        writer.writerows(myfile)
 
 #Transformer un dic en json
 def dictojson(myfile):
