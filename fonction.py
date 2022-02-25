@@ -1,6 +1,5 @@
 
 from csv import*
-import csv
 from json import*
 import json
 import re
@@ -10,6 +9,8 @@ import xml.etree.ElementTree as et
 import xmltodict
 from pprint import pprint
 from tkinter.filedialog import askopenfilename
+from dict2xml import dict2xml
+import io
 
 #Fonction pour déterminer l'extension du fichier
 def determineExtension():
@@ -53,10 +54,15 @@ def verifValidite(extens):
         return False
 #Transformer un dic en csv
 def dictocsv(myfile):
+    for i in range(len(myfile)):
+        elm=myfile[i]
+        keys=list(elm.keys())
     with open("mynewfile.csv","w") as csv_out:
-        writer=writer(csv_out)
-        writer.writerows(myfile)
-
+        writer=DictWriter(csv_out,fieldnames=keys)
+        writer.writeheader()
+        for data in myfile:
+            writer.writerow(data)
+       
 #Transformer un dic en json
 def dictojson(myfile):
     with open("mynewfile.json","w") as json_out:
@@ -67,9 +73,9 @@ def dictoymal(myfile):
         yaml_out.write(dump(myfile))
 #Transformer un dic en xml
 def dictoxml(myfile):
-    myfile=dict(myfile)
     with open("mynewfile.xml","w") as xml_out:
-        xmltodict.unparse(myfile)
+        nf=dict2xml(myfile)
+        xml_out.write(nf)   
 
 #Fonction pour transformer le fichier csv aux autres formats au choix
 def transformcsv(myfile):
@@ -139,7 +145,7 @@ def transformxml(myfile):
                 dictoymal(myfile)
             elif rep=="3":
                 print("Transformation format xml")
-                dictoxml(myfile)
+                dictocsv(myfile)
             elif rep=="4":
                 rep=False
             else:
